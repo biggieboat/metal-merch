@@ -34,6 +34,7 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
         {lines.map((edge: { node: ShopifyCartLine }) => {
           const line = edge.node;
           const merch = line.merchandise;
+          if (!merch) return null;
           const product = merch.product;
           const unitPrice = merch.price;
           const lineTotal = line.cost?.totalAmount;

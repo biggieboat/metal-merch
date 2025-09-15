@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchProductByHandle } from "@/lib/shopify";
 import { addToCartAction } from "@/app/actions/cart";
-import { ShopifyProduct, ShopifyImage, ShopifyProductVariant } from "@/types/shopify";
+import { ShopifyImage, ShopifyProductVariant } from "@/types/shopify";
 
 type PageProps = { params: Promise<{ handle: string }> };
 

@@ -3,41 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
-type Cart = {
-  id: string;
-  checkoutUrl: string;
-  totalQuantity: number;
-  cost?: {
-    subtotalAmount?: { amount?: string; currencyCode?: string };
-    totalAmount?: { amount?: string; currencyCode?: string };
-  };
-  lines?: {
-    edges: Array<{
-      node: {
-        id: string;
-        quantity: number;
-        cost?: { totalAmount?: { amount?: string; currencyCode?: string } };
-        merchandise?: {
-          title?: string;
-          price?: { amount?: string; currencyCode?: string };
-          product?: {
-            title?: string;
-            handle?: string;
-            featuredImage?: { url?: string; altText?: string | null };
-          };
-        };
-      };
-    }>;
-  };
-};
+import { ShopifyCart, ShopifyCartLine } from "@/types/shopify";
 
 const SHIPPING_OPTIONS = [
   { id: "standard", name: "Standard Shipping", price: 20, days: "10-15 business days" },
   { id: "express", name: "Express Shipping", price: 40, days: "3-6 business days" },
 ];
 
-export default function CartClient({ cart }: { cart: Cart | null }) {
+export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
   const [selectedShipping, setSelectedShipping] = useState("standard");
   const lines = cart?.lines?.edges ?? [];
   
@@ -58,7 +31,7 @@ export default function CartClient({ cart }: { cart: Cart | null }) {
   return (
     <div className="space-y-6" suppressHydrationWarning={true}>
       <ul className="divide-y divide-white/10 border border-white/10 rounded" suppressHydrationWarning={true}>
-        {lines.map((edge: { node: any }) => {
+        {lines.map((edge: { node: ShopifyCartLine }) => {
           const line = edge.node;
           const merch = line.merchandise;
           const product = merch.product;

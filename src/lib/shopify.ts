@@ -1,4 +1,5 @@
 import { GraphQLClient, gql } from "graphql-request";
+import { ShopifyProduct, ShopifyCart } from "@/types/shopify";
 
 const storeDomain = process.env.SHOPIFY_STORE_DOMAIN as string | undefined;
 const storefrontToken = process.env.SHOPIFY_STOREFRONT_TOKEN as string | undefined;
@@ -100,37 +101,37 @@ export const queries = {
 
 export type CartLineInput = { merchandiseId: string; quantity: number };
 
-export async function fetchProducts(limit = 24) {
+export async function fetchProducts(limit = 24): Promise<ShopifyProduct[]> {
   const client = getClient();
-  const data = (await client.request(queries.products, { first: limit })) as any;
-  return data.products.edges.map((e: { node: any }) => e.node);
+  const data = (await client.request(queries.products, { first: limit })) as { products: { edges: Array<{ node: ShopifyProduct }> } };
+  return data.products.edges.map((e: { node: ShopifyProduct }) => e.node);
 }
 
-export async function fetchProductByHandle(handle: string) {
+export async function fetchProductByHandle(handle: string): Promise<ShopifyProduct | null> {
   const client = getClient();
-  const data = (await client.request(queries.productByHandle, { handle })) as any;
+  const data = (await client.request(queries.productByHandle, { handle })) as { product: ShopifyProduct | null };
   return data.product;
 }
 
 export async function createCart(lines: CartLineInput[]) {
   const client = getClient();
-  const data = (await client.request(queries.cartCreate, { lines })) as any;
+  const data = (await client.request(queries.cartCreate, { lines })) as { cartCreate: { userErrors?: Array<{ message: string }>; cart: { id: string; checkoutUrl: string; totalQuantity: number } } };
   const error = data.cartCreate.userErrors?.[0]?.message;
   if (error) throw new Error(error);
-  return data.cartCreate.cart as { id: string; checkoutUrl: string; totalQuantity: number };
+  return data.cartCreate.cart;
 }
 
 export async function addLinesToCart(cartId: string, lines: CartLineInput[]) {
   const client = getClient();
-  const data = (await client.request(queries.cartLinesAdd, { cartId, lines })) as any;
+  const data = (await client.request(queries.cartLinesAdd, { cartId, lines })) as { cartLinesAdd: { userErrors?: Array<{ message: string }>; cart: { id: string; checkoutUrl: string; totalQuantity: number } } };
   const error = data.cartLinesAdd.userErrors?.[0]?.message;
   if (error) throw new Error(error);
-  return data.cartLinesAdd.cart as { id: string; checkoutUrl: string; totalQuantity: number };
+  return data.cartLinesAdd.cart;
 }
 
-export async function getCart(cartId: string) {
+export async function getCart(cartId: string): Promise<ShopifyCart | null> {
   const client = getClient();
-  const data = (await client.request(queries.cartQuery, { cartId })) as any;
+  const data = (await client.request(queries.cartQuery, { cartId })) as { cart: ShopifyCart | null };
   return data.cart;
 }
 

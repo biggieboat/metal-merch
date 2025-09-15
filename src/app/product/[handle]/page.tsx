@@ -41,7 +41,7 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
           {images.length > 1 && (
             <div className="grid grid-cols-5 gap-3">
-              {images.slice(1, 6).map((img: any) => (
+              {images.slice(1, 6).map((img: ShopifyImage) => (
                 <Image key={img.url} src={img.url} alt={img.altText || ""} width={300} height={300} className="rounded border border-white/10 object-cover aspect-square hover:opacity-90 transition" />
               ))}
             </div>

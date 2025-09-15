@@ -27,7 +27,7 @@ export default async function ProductPage({ params }: PageProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="space-y-4">
-          <div className="aspect-[3/4] w-full overflow-hidden rounded border border-white/10 bg-black/50">
+          <div className="aspect-[3/4] w-full overflow-hidden rounded border border-[var(--border)] bg-[var(--muted)]">
             {images[0] && (
               <Image
                 src={images[0].url}
@@ -42,21 +42,21 @@ export default async function ProductPage({ params }: PageProps) {
           {images.length > 1 && (
             <div className="grid grid-cols-5 gap-3">
               {images.slice(1, 6).map((img: ShopifyImage) => (
-                <Image key={img.url} src={img.url} alt={img.altText || ""} width={300} height={300} className="rounded border border-white/10 object-cover aspect-square hover:opacity-90 transition" />
+                <Image key={img.url} src={img.url} alt={img.altText || ""} width={300} height={300} className="rounded border border-[var(--border)] object-cover aspect-square hover:opacity-90 hover:border-[var(--accent)] transition" />
               ))}
             </div>
           )}
         </div>
 
         <div className="lg:pl-4">
-          <h1 className="text-3xl font-bold tracking-tight mb-3">{product.title}</h1>
+          <h1 className="text-3xl font-bold tracking-tight mb-3 text-[var(--primary)]">{product.title}</h1>
           {price && (
-            <div className="text-xl mb-6 text-white/90">
+            <div className="text-xl mb-6 text-[var(--accent-foreground)]">
               {price.amount} {price.currencyCode}
             </div>
           )}
 
-          <div className="prose prose-invert max-w-none border-t border-white/10 pt-6" dangerouslySetInnerHTML={{ __html: product.descriptionHtml || "" }} />
+          <div className="prose prose-invert max-w-none border-t border-[var(--border)] pt-6" dangerouslySetInnerHTML={{ __html: product.descriptionHtml || "" }} />
 
           <form
             action={async (formData: FormData) => {
@@ -64,15 +64,15 @@ export default async function ProductPage({ params }: PageProps) {
               const variantId = String(formData.get("variantId"));
               await addToCartAction(variantId, 1);
             }}
-            className="mt-8 space-y-4 border-t border-white/10 pt-6"
+            className="mt-8 space-y-4 border-t border-[var(--border)] pt-6"
           >
             {variants.length > 0 && (
               <div>
-                <label className="block text-sm mb-2 text-white/80">Select variant</label>
+                <label className="block text-sm mb-2 text-[var(--muted-foreground)]">Select variant</label>
                 <select
                   name="variantId"
                   defaultValue={defaultVariant?.id}
-                  className="bg-black/60 border border-white/20 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-white/30"
+                  className="bg-[var(--muted)] border border-[var(--border)] rounded px-3 py-2 w-full text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--accent)] transition-colors"
                 >
                   {variants.map((v: ShopifyProductVariant) => (
                     <option key={v.id} value={v.id} disabled={!v.availableForSale}>
@@ -85,13 +85,13 @@ export default async function ProductPage({ params }: PageProps) {
 
             <button
               type="submit"
-              className="w-full bg-white text-black font-semibold rounded px-4 py-3 hover:opacity-90 disabled:opacity-50"
+              className="w-full bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold rounded px-4 py-3 hover:bg-[var(--accent-foreground)] disabled:opacity-50 transition-colors"
               disabled={!defaultVariant?.availableForSale}
             >
               {defaultVariant?.availableForSale ? "Add to cart" : "Sold out"}
             </button>
 
-            <div className="text-xs text-white/50">Ships worldwide. Secure checkout via Shopify.</div>
+            <div className="text-xs text-[var(--muted-foreground)]">Ships worldwide. Secure checkout via Shopify.</div>
           </form>
         </div>
       </div>

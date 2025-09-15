@@ -22,15 +22,15 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
 
   if (lines.length === 0) {
     return (
-      <div className="text-white/70">
-        Your cart is empty. <Link href="/" className="underline">Continue shopping</Link>.
+      <div className="text-[var(--muted-foreground)]">
+        Your cart is empty. <Link href="/" className="underline text-[var(--primary)] hover:text-[var(--accent-foreground)] transition-colors">Continue shopping</Link>.
       </div>
     );
   }
 
   return (
     <div className="space-y-6" suppressHydrationWarning={true}>
-      <ul className="divide-y divide-white/10 border border-white/10 rounded" suppressHydrationWarning={true}>
+      <ul className="divide-y divide-[var(--border)] border border-[var(--border)] rounded bg-[var(--card)]" suppressHydrationWarning={true}>
         {lines.map((edge: { node: ShopifyCartLine }) => {
           const line = edge.node;
           const merch = line.merchandise;
@@ -47,18 +47,18 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
                   alt={product.featuredImage.altText || product.title || "Product image"}
                   width={80}
                   height={96}
-                  className="w-20 h-24 rounded border border-white/10 object-cover"
+                  className="w-20 h-24 rounded border border-[var(--border)] object-cover"
                 />
               )}
               <div className="flex-1">
-                <div className="font-medium line-clamp-1">{product.title}</div>
-                <div className="text-xs text-white/60">Size: {merch.title}</div>
+                <div className="font-medium line-clamp-1 text-[var(--foreground)]">{product.title}</div>
+                <div className="text-xs text-[var(--muted-foreground)]">Size: {merch.title}</div>
               </div>
-              <div className="text-sm text-white/80">
+              <div className="text-sm text-[var(--muted-foreground)]">
                 {unitPrice?.amount} {unitPrice?.currencyCode}
               </div>
-              <div className="text-sm text-white/80">Qty: {line.quantity}</div>
-              <div className="text-sm font-semibold text-white">
+              <div className="text-sm text-[var(--muted-foreground)]">Qty: {line.quantity}</div>
+              <div className="text-sm font-semibold text-[var(--primary)]">
                 {lineTotal?.amount} {lineTotal?.currencyCode}
               </div>
             </li>
@@ -67,18 +67,18 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
       </ul>
 
         <div className="flex justify-end" suppressHydrationWarning={true}>
-          <div className="w-full max-w-sm border border-white/10 rounded p-4" suppressHydrationWarning={true}>
+          <div className="w-full max-w-sm border border-[var(--border)] rounded p-4 bg-[var(--card)]" suppressHydrationWarning={true}>
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-white/70">Subtotal</span>
-            <span className="text-white">{cart?.cost?.subtotalAmount?.amount} {cart?.cost?.subtotalAmount?.currencyCode}</span>
+            <span className="text-[var(--muted-foreground)]">Subtotal</span>
+            <span className="text-[var(--foreground)]">{cart?.cost?.subtotalAmount?.amount} {cart?.cost?.subtotalAmount?.currencyCode}</span>
           </div>
           
-          <div className="border-t border-white/10 pt-3 mb-3">
-            <div className="text-sm text-white/70 mb-2">Shipping</div>
+          <div className="border-t border-[var(--border)] pt-3 mb-3">
+            <div className="text-sm text-[var(--muted-foreground)] mb-2">Shipping</div>
             <select
               value={selectedShipping}
               onChange={(e) => setSelectedShipping(e.target.value)}
-              className="w-full bg-black/60 border border-white/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 mb-2"
+              className="w-full bg-[var(--muted)] border border-[var(--border)] rounded px-3 py-2 text-sm text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--accent)] mb-2 transition-colors"
             >
               {SHIPPING_OPTIONS.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -92,8 +92,8 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
           </div>
 
           <div className="flex items-center justify-between text-sm mb-4">
-            <span className="text-white/70">Total</span>
-            <span className="text-white font-semibold">
+            <span className="text-[var(--muted-foreground)]">Total</span>
+            <span className="text-[var(--primary)] font-semibold">
               ${total.toFixed(2)} {cart?.cost?.subtotalAmount?.currencyCode}
             </span>
           </div>
@@ -101,7 +101,7 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
           {cart?.checkoutUrl && (
             <a
               href={cart.checkoutUrl}
-              className="w-full block text-center bg-white text-black font-semibold rounded px-4 py-3 hover:opacity-90"
+              className="w-full block text-center bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold rounded px-4 py-3 hover:bg-[var(--accent-foreground)] transition-colors"
             >
               Checkout
             </a>

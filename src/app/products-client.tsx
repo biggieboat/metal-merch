@@ -81,10 +81,10 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
   return (
     <div>
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div ref={tabsRef} className="relative inline-flex items-center gap-1 rounded border border-white/15 bg-black/40 p-1">
+        <div ref={tabsRef} className="relative inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--muted)] p-1">
           {/* Sliding indicator */}
           <div
-            className="absolute top-1 bottom-1 rounded bg-white transition-all duration-300"
+            className="absolute top-1 bottom-1 rounded bg-[var(--primary)] transition-all duration-300"
             style={{ left: indicator.left, width: indicator.width }}
           />
           {TABS.map((t) => (
@@ -95,7 +95,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
               }}
               onClick={() => setTab(t.key)}
               className={`relative z-10 px-3 py-1.5 text-sm rounded transition-colors ${
-                tab === t.key ? "text-black" : "text-white/80 hover:text-white"
+                tab === t.key ? "text-[var(--primary-foreground)]" : "text-[var(--muted-foreground)] hover:text-[var(--primary)]"
               }`}
             >
               {t.label}
@@ -109,7 +109,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
             placeholder="Search products..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full md:w-72 rounded border border-white/15 bg-black/40 px-3 py-2 text-sm placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="w-full md:w-72 rounded border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--accent)] transition-colors"
           />
         </div>
       </div>
@@ -130,12 +130,12 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
                   alt={p.featuredImage.altText || p.title}
                   width={600}
                   height={800}
-                  className="aspect-[3/4] object-cover rounded border border-white/10 group-hover:opacity-90 transition"
+                  className="aspect-[3/4] object-cover rounded border border-[var(--border)] group-hover:opacity-90 transition group-hover:border-[var(--accent)]"
                 />
               )}
               <div className="mt-3">
-                <p className="text-sm uppercase tracking-wide">{p.title}</p>
-                <p className="text-sm text-white/60">
+                <p className="text-sm uppercase tracking-wide text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">{p.title}</p>
+                <p className="text-sm text-[var(--muted-foreground)]">
                   {p.priceRange?.minVariantPrice?.amount} {p.priceRange?.minVariantPrice?.currencyCode}
                 </p>
               </div>

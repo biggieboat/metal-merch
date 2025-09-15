@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 type Cart = {
   id: string;
@@ -48,7 +50,7 @@ export default function CartClient({ cart }: { cart: Cart | null }) {
   if (lines.length === 0) {
     return (
       <div className="text-white/70">
-        Your cart is empty. <a href="/" className="underline">Continue shopping</a>.
+        Your cart is empty. <Link href="/" className="underline">Continue shopping</Link>.
       </div>
     );
   }
@@ -56,7 +58,7 @@ export default function CartClient({ cart }: { cart: Cart | null }) {
   return (
     <div className="space-y-6" suppressHydrationWarning={true}>
       <ul className="divide-y divide-white/10 border border-white/10 rounded" suppressHydrationWarning={true}>
-        {lines.map((edge: any) => {
+        {lines.map((edge: { node: any }) => {
           const line = edge.node;
           const merch = line.merchandise;
           const product = merch.product;
@@ -65,9 +67,11 @@ export default function CartClient({ cart }: { cart: Cart | null }) {
           return (
             <li key={line.id} className="grid grid-cols-[80px,1fr,100px,120px,80px] items-center gap-4 p-4" suppressHydrationWarning={true}>
               {product.featuredImage && (
-                <img
+                <Image
                   src={product.featuredImage.url}
                   alt={product.featuredImage.altText || product.title}
+                  width={80}
+                  height={96}
                   className="w-20 h-24 rounded border border-white/10 object-cover"
                 />
               )}

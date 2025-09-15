@@ -103,7 +103,7 @@ export type CartLineInput = { merchandiseId: string; quantity: number };
 export async function fetchProducts(limit = 24) {
   const client = getClient();
   const data = (await client.request(queries.products, { first: limit })) as any;
-  return data.products.edges.map((e: any) => e.node);
+  return data.products.edges.map((e: { node: any }) => e.node);
 }
 
 export async function fetchProductByHandle(handle: string) {

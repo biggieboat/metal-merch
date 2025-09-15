@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
 import { fetchProducts, isShopifyConfigured } from "@/lib/shopify";
 import ProductsClient from "./products-client";
 
@@ -20,7 +18,7 @@ export default async function Home() {
         <ProductsClient initialProducts={products} />
       </main>
     );
-  } catch (error: any) {
+  } catch {
     return (
       <main className="min-h-screen px-6 py-10" suppressHydrationWarning={true}>
         <h1 className="text-2xl font-bold mb-4">Shopify connection error</h1>

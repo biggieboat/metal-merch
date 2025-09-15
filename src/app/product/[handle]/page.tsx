@@ -11,9 +11,9 @@ export default async function ProductPage({ params }: PageProps) {
   if (!product) {
     return <div className="px-6 py-10">Product not found.</div>;
   }
-  const images = product.images?.edges?.map((e: any) => e.node) ?? [];
-  const variants = product.variants?.edges?.map((e: any) => e.node) ?? [];
-  const defaultVariant = variants.find((v: any) => v.availableForSale) ?? variants[0];
+  const images = product.images?.edges?.map((e: { node: any }) => e.node) ?? [];
+  const variants = product.variants?.edges?.map((e: { node: any }) => e.node) ?? [];
+  const defaultVariant = variants.find((v: { availableForSale: boolean }) => v.availableForSale) ?? variants[0];
   const price = defaultVariant?.price;
 
   return (
@@ -73,7 +73,7 @@ export default async function ProductPage({ params }: PageProps) {
                   defaultValue={defaultVariant?.id}
                   className="bg-black/60 border border-white/20 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-white/30"
                 >
-                  {variants.map((v: any) => (
+                  {variants.map((v: { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string } }) => (
                     <option key={v.id} value={v.id} disabled={!v.availableForSale}>
                       {v.title} {v.availableForSale ? "" : "(Sold out)"} — {v.price.amount} {v.price.currencyCode}
                     </option>

@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           )}
 
-          <div className="prose prose-invert max-w-none border-t border-white/10 pt-6" dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} />
+          <div className="prose prose-invert max-w-none border-t border-white/10 pt-6" dangerouslySetInnerHTML={{ __html: product.descriptionHtml || "" }} />
 
           <form
             action={async (formData: FormData) => {

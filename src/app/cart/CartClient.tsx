@@ -36,6 +36,7 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
           const merch = line.merchandise;
           if (!merch) return null;
           const product = merch.product;
+          if (!product) return null;
           const unitPrice = merch.price;
           const lineTotal = line.cost?.totalAmount;
           return (
@@ -43,7 +44,7 @@ export default function CartClient({ cart }: { cart: ShopifyCart | null }) {
               {product.featuredImage && (
                 <Image
                   src={product.featuredImage.url}
-                  alt={product.featuredImage.altText || product.title}
+                  alt={product.featuredImage.altText || product.title || "Product image"}
                   width={80}
                   height={96}
                   className="w-20 h-24 rounded border border-white/10 object-cover"

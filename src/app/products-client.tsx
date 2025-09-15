@@ -90,7 +90,9 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
           {TABS.map((t) => (
             <button
               key={t.key}
-              ref={(el) => (btnRefs.current[t.key] = el)}
+              ref={(el) => {
+                if (el) btnRefs.current[t.key] = el;
+              }}
               onClick={() => setTab(t.key)}
               className={`relative z-10 px-3 py-1.5 text-sm rounded transition-colors ${
                 tab === t.key ? "text-black" : "text-white/80 hover:text-white"

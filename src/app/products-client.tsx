@@ -29,6 +29,22 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
   const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicator, setIndicator] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
+  // Set initial indicator position
+  useEffect(() => {
+    const updateIndicator = () => {
+      const container = tabsRef.current;
+      const activeBtn = btnRefs.current[tab];
+      if (!container || !activeBtn) return;
+      const cRect = container.getBoundingClientRect();
+      const bRect = activeBtn.getBoundingClientRect();
+      setIndicator({ left: bRect.left - cRect.left, width: bRect.width });
+    };
+    
+    // Initial position after component mounts
+    const timeoutId = setTimeout(updateIndicator, 100);
+    return () => clearTimeout(timeoutId);
+  }, [tab]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return initialProducts.filter((p) => {
@@ -57,12 +73,18 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
 
   // Update sliding indicator position
   useEffect(() => {
-    const container = tabsRef.current;
-    const activeBtn = btnRefs.current[tab];
-    if (!container || !activeBtn) return;
-    const cRect = container.getBoundingClientRect();
-    const bRect = activeBtn.getBoundingClientRect();
-    setIndicator({ left: bRect.left - cRect.left, width: bRect.width });
+    const updateIndicator = () => {
+      const container = tabsRef.current;
+      const activeBtn = btnRefs.current[tab];
+      if (!container || !activeBtn) return;
+      const cRect = container.getBoundingClientRect();
+      const bRect = activeBtn.getBoundingClientRect();
+      setIndicator({ left: bRect.left - cRect.left, width: bRect.width });
+    };
+    
+    // Small delay to ensure DOM is updated
+    const timeoutId = setTimeout(updateIndicator, 10);
+    return () => clearTimeout(timeoutId);
   }, [tab]);
 
   useEffect(() => {
@@ -84,7 +106,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
         <div ref={tabsRef} className="relative inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--muted)] p-1">
           {/* Sliding indicator */}
           <div
-            className="absolute top-1 bottom-1 rounded bg-[var(--primary)] transition-all duration-300"
+            className="absolute top-1 bottom-1 rounded bg-white transition-all duration-300"
             style={{ left: indicator.left, width: indicator.width }}
           />
           {TABS.map((t) => (
@@ -95,7 +117,7 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
               }}
               onClick={() => setTab(t.key)}
               className={`relative z-10 px-3 py-1.5 text-sm rounded transition-colors ${
-                tab === t.key ? "text-[var(--primary-foreground)]" : "text-[var(--muted-foreground)] hover:text-[var(--primary)]"
+                tab === t.key ? "text-black" : "text-[var(--muted-foreground)] hover:text-[var(--primary)]"
               }`}
             >
               {t.label}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import AnnouncementBar from "./AnnouncementBar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,9 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-gray-100`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-gray-100`} suppressHydrationWarning={true}>
+        <AnnouncementBar />
         <header className="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur">
-          <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+          <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between" suppressHydrationWarning={true}>
             <Link href="/" className="text-xl font-bold tracking-tight">
               {process.env.SITE_NAME || "Obsidian Cult Merch"}
             </Link>
@@ -37,7 +39,7 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <div className="mx-auto max-w-6xl">{children}</div>
+        <div className="mx-auto max-w-6xl" suppressHydrationWarning={true}>{children}</div>
         <footer className="mt-16 border-t border-white/10 py-10 text-center text-xs text-white/50">
           © {new Date().getFullYear()} {process.env.SITE_NAME || "Obsidian Cult Merch"}
         </footer>

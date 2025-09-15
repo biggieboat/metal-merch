@@ -1,23 +1,24 @@
 import { GraphQLClient, gql } from "graphql-request";
 
-const storeDomain = process.env.SHOPIFY_STORE_DOMAIN as string;
-const storefrontToken = process.env.SHOPIFY_STOREFRONT_TOKEN as string;
+const storeDomain = process.env.SHOPIFY_STORE_DOMAIN as string | undefined;
+const storefrontToken = process.env.SHOPIFY_STOREFRONT_TOKEN as string | undefined;
 const apiVersion = process.env.SHOPIFY_API_VERSION || "2024-07";
 
-if (!storeDomain || !storefrontToken) {
-  // Fail fast at runtime to make misconfiguration obvious during dev
-  throw new Error("Missing Shopify env. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN.");
+export function isShopifyConfigured(): boolean {
+  return Boolean(storeDomain && storefrontToken);
 }
 
-export const shopifyClient = new GraphQLClient(
-  `https://${storeDomain}/api/${apiVersion}/graphql.json`,
-  {
+function getClient(): GraphQLClient {
+  if (!storeDomain || !storefrontToken) {
+    throw new Error("Shopify not configured. Add SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN to .env.local");
+  }
+  return new GraphQLClient(`https://${storeDomain}/api/${apiVersion}/graphql.json`, {
     headers: {
       "X-Shopify-Storefront-Access-Token": storefrontToken,
       "Content-Type": "application/json",
     },
-  }
-);
+  });
+}
 
 export const queries = {
   products: gql`
@@ -29,6 +30,7 @@ export const queries = {
             handle
             title
             description
+            tags
             featuredImage { url altText width height }
             priceRange { minVariantPrice { amount currencyCode } }
           }
@@ -62,6 +64,10 @@ export const queries = {
         id
         checkoutUrl
         totalQuantity
+        cost {
+          subtotalAmount { amount currencyCode }
+          totalAmount { amount currencyCode }
+        }
         lines(first: 50) {
           edges {
             node {
@@ -95,31 +101,36 @@ export const queries = {
 export type CartLineInput = { merchandiseId: string; quantity: number };
 
 export async function fetchProducts(limit = 24) {
-  const data = await shopifyClient.request(queries.products, { first: limit });
+  const client = getClient();
+  const data = (await client.request(queries.products, { first: limit })) as any;
   return data.products.edges.map((e: any) => e.node);
 }
 
 export async function fetchProductByHandle(handle: string) {
-  const data = await shopifyClient.request(queries.productByHandle, { handle });
+  const client = getClient();
+  const data = (await client.request(queries.productByHandle, { handle })) as any;
   return data.product;
 }
 
 export async function createCart(lines: CartLineInput[]) {
-  const data = await shopifyClient.request(queries.cartCreate, { lines });
+  const client = getClient();
+  const data = (await client.request(queries.cartCreate, { lines })) as any;
   const error = data.cartCreate.userErrors?.[0]?.message;
   if (error) throw new Error(error);
   return data.cartCreate.cart as { id: string; checkoutUrl: string; totalQuantity: number };
 }
 
 export async function addLinesToCart(cartId: string, lines: CartLineInput[]) {
-  const data = await shopifyClient.request(queries.cartLinesAdd, { cartId, lines });
+  const client = getClient();
+  const data = (await client.request(queries.cartLinesAdd, { cartId, lines })) as any;
   const error = data.cartLinesAdd.userErrors?.[0]?.message;
   if (error) throw new Error(error);
   return data.cartLinesAdd.cart as { id: string; checkoutUrl: string; totalQuantity: number };
 }
 
 export async function getCart(cartId: string) {
-  const data = await shopifyClient.request(queries.cartQuery, { cartId });
+  const client = getClient();
+  const data = (await client.request(queries.cartQuery, { cartId })) as any;
   return data.cart;
 }
 

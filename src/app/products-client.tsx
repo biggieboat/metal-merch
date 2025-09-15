@@ -101,13 +101,14 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
   }, [tab]);
 
   return (
-    <div>
-      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div ref={tabsRef} className="relative inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--muted)] p-1">
+    <div suppressHydrationWarning={true}>
+      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between" suppressHydrationWarning={true}>
+        <div ref={tabsRef} className="relative inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--muted)] p-1" suppressHydrationWarning={true}>
           {/* Sliding indicator */}
           <div
             className="absolute top-1 bottom-1 rounded bg-white transition-all duration-300"
             style={{ left: indicator.left, width: indicator.width }}
+            suppressHydrationWarning={true}
           />
           {TABS.map((t) => (
             <button
@@ -119,19 +120,21 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
               className={`relative z-10 px-3 py-1.5 text-sm rounded transition-colors ${
                 tab === t.key ? "text-black" : "text-[var(--muted-foreground)] hover:text-[var(--primary)]"
               }`}
+              suppressHydrationWarning={true}
             >
               {t.label}
             </button>
           ))}
         </div>
 
-        <div className="relative">
+        <div className="relative" suppressHydrationWarning={true}>
           <input
             type="text"
             placeholder="Search products..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full md:w-72 rounded border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--accent)] transition-colors"
+            suppressHydrationWarning={true}
           />
         </div>
       </div>
@@ -153,11 +156,12 @@ export default function ProductsClient({ initialProducts }: { initialProducts: P
                   width={600}
                   height={800}
                   className="aspect-[3/4] object-cover rounded border border-[var(--border)] group-hover:opacity-90 transition group-hover:border-[var(--accent)]"
+                  suppressHydrationWarning={true}
                 />
               )}
-              <div className="mt-3">
-                <p className="text-sm uppercase tracking-wide text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">{p.title}</p>
-                <p className="text-sm text-[var(--muted-foreground)]">
+              <div className="mt-3" suppressHydrationWarning={true}>
+                <p className="text-sm uppercase tracking-wide text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors" suppressHydrationWarning={true}>{p.title}</p>
+                <p className="text-sm text-[var(--muted-foreground)]" suppressHydrationWarning={true}>
                   {p.priceRange?.minVariantPrice?.amount} {p.priceRange?.minVariantPrice?.currencyCode}
                 </p>
               </div>

@@ -17,8 +17,8 @@ export default function AnnouncementBar() {
   if (!visible) return null;
 
   return (
-    <div className="bg-[var(--accent)] text-[var(--accent-foreground)] text-center py-2 text-sm font-medium relative">
-      <div className="mx-auto max-w-6xl px-6">
+    <div className="bg-[var(--accent)] text-[var(--accent-foreground)] text-center py-2 text-sm font-medium relative" suppressHydrationWarning={true}>
+      <div className="mx-auto max-w-6xl px-6" suppressHydrationWarning={true}>
         🚚 Free shipping on orders over $150
       </div>
       <button
@@ -30,6 +30,7 @@ export default function AnnouncementBar() {
           } catch {}
         }}
         className="absolute right-2 top-1/2 -translate-y-1/2 rounded px-2 py-1 text-[var(--accent-foreground)]/70 hover:text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-colors"
+        suppressHydrationWarning={true}
       >
         ×
       </button>

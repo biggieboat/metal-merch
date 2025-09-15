@@ -1,5 +1,7 @@
 Obsidian Cult Merch — a Next.js storefront integrated with Shopify Storefront API for selling black/death metal shirts and longsleeves.
 
+<!-- Updated for Vercel deployment -->
+
 ## Getting Started
 
 1) Create a Shopify custom app and generate a Storefront API access token.
